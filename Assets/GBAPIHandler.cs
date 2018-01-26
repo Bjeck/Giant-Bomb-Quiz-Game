@@ -16,7 +16,7 @@ public class GBAPIHandler : MonoBehaviour {
     public int MAXNR = 59518;
     public int amtOfGamesToPull = 10;
 
-    string urlPost = "&format=JSON&limit=10&field_list=aliases,api_detail_url,characters,concepts,deck,developers,image,locations,name,objects,people,platforms,publishers,themes,expected_release_month,expected_release_quarter,expected_release_year,killed_characters,original_release_date,site_detail_url";
+    string urlPost = "&format=JSON&limit=10&field_list=aliases,api_detail_url,characters,concepts,deck,developers,image,locations,name,objects,people,platforms,publishers,themes,expected_release_month,expected_release_quarter,expected_release_year,killed_characters,original_release_date,site_detail_url,genres";
     //string urlPost = "&format=JSON&limit=10&field_list=api_detail_url,deck,name";
     //expected_release_day expected release moth/quarter/year  first appearance characters/concepts/locations/objects/people, killed_characters, original_release_date site_detail_url, 
 
@@ -30,7 +30,7 @@ public class GBAPIHandler : MonoBehaviour {
     // Use this for initialization
     void Start () {
         LoadGamesFromLocalFile();
-        StartPullQueue(3, GotData);
+        StartPullQueue(2, GotData);
     }
     
 
@@ -196,6 +196,8 @@ public class GBAPIHandler : MonoBehaviour {
         if (g.people != null) { g.featureList.Add(QuizType.People, g.people.OfType<Feature>().ToList()); }
         if (g.developers != null) { g.featureList.Add(QuizType.Developer, g.developers.OfType<Feature>().ToList()); }
         if (g.publishers != null) { g.featureList.Add(QuizType.Publisher, g.publishers.OfType<Feature>().ToList()); }
+        if (g.genres != null) { g.featureList.Add(QuizType.Genre, g.genres.OfType<Feature>().ToList()); }
+
     }
 
 
@@ -269,6 +271,7 @@ public class Game
     public List<Person> people = new List<Person>();
     public List<Developer> developers = new List<Developer>();
     public List<Publisher> publishers = new List<Publisher>();
+    public List<Genre> genres = new List<Genre>();
 
     public List<FirstAppearancePerson> first_appearance_people = new List<FirstAppearancePerson>();
     public List<FirstAppearanceCharacter> first_appearance_characters = new List<FirstAppearanceCharacter>();
@@ -373,6 +376,14 @@ public class Publisher : Feature
 
 [System.Serializable]
 public class Theme : Feature
+{
+    public string api_detail_url;
+    public string name;
+    public override string Name { get { return name; } set { name = value; } }
+}
+
+[System.Serializable]
+public class Genre : Feature
 {
     public string api_detail_url;
     public string name;

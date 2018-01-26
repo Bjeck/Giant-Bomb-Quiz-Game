@@ -18,6 +18,7 @@ public class UIGame : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     public Image shadow0IMG;
     public Image shadow1IMG;
     public Image shadow2IMG;
+    public Sprite spriteToUse;
 
     public QuizManager quiz;
 
@@ -46,14 +47,24 @@ public class UIGame : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         gamename.gameObject.SetActive(true);
 
 
-    //    StartCoroutine(PullingImage());
+        StartCoroutine(PullingImage());
 
     }
-    
+
+    public void Setup(Game gb, Sprite spr)
+    {
+        gameIAm = gb;
+        gamename.text = gb.name;
+        //Image!
+        gamename.gameObject.SetActive(true);
+        
+        gameIMG.sprite = spr;
+        spriteToUse = spr;
+    }
+
     IEnumerator PullingImage()
     {
         yield return new WaitForSeconds(Random.Range(0.2f, 1.2f));
-        print("pulling image from " + gameIAm.image.medium_url);
         using (WWW www = new WWW(gameIAm.image.medium_url))
         {
             yield return www;
@@ -63,12 +74,14 @@ public class UIGame : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
             // assign the downloaded image to sprite
             www.LoadImageIntoTexture(texture);
             Rect rec = new Rect(0, 0, texture.width, texture.height);
-            Sprite spriteToUse = Sprite.Create(texture, rec, new Vector2(0.5f, 0.5f), 100);
+            spriteToUse = Sprite.Create(texture, rec, new Vector2(0.5f, 0.5f), 100);
             gameIMG.sprite = spriteToUse;
+            print(gameObject.name + " pulled image from " + gameIAm.image.medium_url);
+
             //shadow0IMG.sprite = spriteToUse;
             //shadow1IMG.sprite = spriteToUse;
             //shadow2IMG.sprite = spriteToUse;
-            
+
 
             www.Dispose();
         }
@@ -92,10 +105,10 @@ public class UIGame : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         }
         else
         {
-            StartCoroutine(Util.MoveToPos(offSetHeightPos, offSetHeightPos - quiz.outOfScreenY, rectT, quiz.curves.downCurve, 1));
-            StartCoroutine(Util.MoveToPos(offSetHeightPos, offSetHeightPos - quiz.outOfScreenY, shadow0, quiz.curves.downCurve, 1));
-            StartCoroutine(Util.MoveToPos(offSetHeightPos, offSetHeightPos - quiz.outOfScreenY, shadow1, quiz.curves.downCurve, 1));
-            StartCoroutine(Util.MoveToPos(offSetHeightPos, offSetHeightPos - quiz.outOfScreenY, shadow2, quiz.curves.downCurve, 1));
+          //  StartCoroutine(Util.MoveToPos(offSetHeightPos, offSetHeightPos - quiz.outOfScreenY, ownRect, quiz.curves.downCurve, 1));
+         //   StartCoroutine(Util.MoveToPos(offSetHeightPos, offSetHeightPos - quiz.outOfScreenY, shadow0, quiz.curves.downCurve, 1));
+          //  StartCoroutine(Util.MoveToPos(offSetHeightPos, offSetHeightPos - quiz.outOfScreenY, shadow1, quiz.curves.downCurve, 1));
+          //  StartCoroutine(Util.MoveToPos(offSetHeightPos, offSetHeightPos - quiz.outOfScreenY, shadow2, quiz.curves.downCurve, 1));
             // StartCoroutine(Util.Spin(rectT, quiz.curves.downCurve, 1, -10, -360, false));
             gamename.gameObject.SetActive(false);
         }
@@ -118,7 +131,7 @@ public class UIGame : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
 
 
-
+    //deck games need to be different than quiz games -- or at least, they should have this stuff ----- inherit? make a game class that's larger ? or make a DeckGame?
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!quiz.quizOn)

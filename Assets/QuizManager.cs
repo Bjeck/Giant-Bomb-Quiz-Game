@@ -6,15 +6,18 @@ using TMPro;
 using System.Linq;
 
 
-public enum QuizType { Platform, Character, Concept, Location, Object, Theme, People, Developer, Publisher, Name }
+public enum QuizType { Platform, Character, Concept, Location, Object, Theme, People, Developer, Publisher, Genre, Name }
 
 public class QuizManager : MonoBehaviour {
 
     public Curves curves;
 
     public GBAPIHandler apiHandler;
-    public List<Game> currentGames = new List<Game>();
 
+    public Deck deck;
+
+    public List<Game> currentGames = new List<Game>();
+    
     public RectTransform canvasRect;
     public RectTransform quizObj;
 
@@ -73,6 +76,8 @@ public class QuizManager : MonoBehaviour {
         gamesToPickFrom = apiHandler.pulledGames;
         currentGames.Clear();
 
+        wrongChoiceCounter = 0;
+
         int[] rands = new int[3];
         for (int i = 0; i < 3; i++)
         {
@@ -93,19 +98,19 @@ public class QuizManager : MonoBehaviour {
     public void DisplayQuiz()
     {
         ShowRawDebugText();
+        if(deck.games.Count > 0)
+        {
+           // CompareGameToCurGames(deck.games[deck.games.Count - 1].gameIAm);    
+        }
 
         List<QuizType> validTypes = new List<QuizType>();
         
         validTypes = TestForFeatures();
-        
-        print("Can Pick from " + validTypes.Count + " categories");
-
-
+      //  print("Can Pick from " + validTypes.Count + " categories");
         QuizType typ = validTypes[Random.Range(0, validTypes.Count)];
-        //need to have some check in that these games can actually do this. so if the three games have no platforms, don't pick platform. etc.
-        
         print(typ.ToString());
 
+        //currently only can choose a feature quiz
         DisplayFeatureQuiz(typ);
 
         StartCoroutine(Util.MoveToPos(question.rectTransform.anchoredPosition - outOfScreenX, question.rectTransform.anchoredPosition, question.rectTransform, curves.moveCurve, 2));
@@ -135,14 +140,12 @@ public class QuizManager : MonoBehaviour {
                 featuresToGuessFrom.AddRange(r.featureList[type]);
             }
         }
-        print("found " + featuresToGuessFrom.Count + " " + type.ToString() + "s Picking one.");
 
         int index = Random.Range(0, featuresToGuessFrom.Count);
 
         Feature theOne = featuresToGuessFrom[index];
         featureAskedAboutInQuestion = theOne;
-
-        print("Picked " + theOne.Name);
+        print("found " + featuresToGuessFrom.Count + " " + type.ToString() + "s Picking "+theOne.Name);
 
         string q = FindQuestionString(quizType);
         q = string.Format(q, theOne.Name);
@@ -189,15 +192,13 @@ public class QuizManager : MonoBehaviour {
 
     public void TestAnswer(UIGame game)
     {
-        print("Test answer");
-
         foreach(KeyValuePair<QuizType,List<Feature>> f in game.gameIAm.featureList)
         {
             if(f.Key == quizType)
             {
                 if (f.Value.Contains(featureAskedAboutInQuestion))
                 {
-                    print("Correct answer!");
+                  //  print("Correct answer!");
                     DoCorrectAnswer(game);
                     return;
                 }
@@ -249,9 +250,8 @@ public class QuizManager : MonoBehaviour {
     {
         cGroup.interactable = false;
         quizOn = false;
-
-        desc.FillText(GetCorrectAnswer().gameIAm);
-        StartCoroutine(Util.MoveToPos(desc.rect.anchoredPosition + outOfScreenX, desc.rect.anchoredPosition, desc.rect, curves.moveCurve, 2));
+        
+        deck.AddCard(GetCorrectAnswer());
         
         if (isWin)
         {
@@ -262,6 +262,51 @@ public class QuizManager : MonoBehaviour {
         {
 
         }
+
+        StartCoroutine(EndQuizRoll());
+    }
+
+    IEnumerator EndQuizRoll()
+    {
+        UIGame cor = GetCorrectAnswer();
+        for (int i = 0; i < 3; i++)
+        {
+            float delay = Random.Range(0, 0.5f);
+            if(uiGames[i] != cor)
+            {
+                StartCoroutine(Util.MoveToPos(uiGames[i].ownRect.anchoredPosition, uiGames[i].ownRect.anchoredPosition - outOfScreenX, uiGames[i].ownRect, curves.moveCurve, 1.2f, delay));
+            }
+            else
+            {
+                StartCoroutine(Util.MoveToPos(uiGames[i].ownRect.anchoredPosition, uiGames[i].ownRect.anchoredPosition - outOfScreenY, uiGames[i].ownRect, curves.moveCurve, 1.2f, delay)); //move to deck. in theory.
+            }
+           // StartCoroutine(Util.WaitToDisable(uiGames[i].ownRect.gameObject, delay));
+        }
+        yield return new WaitForSeconds(0.5f);
+
+        StartCoroutine(Util.MoveToPos(desc.rect.anchoredPosition + outOfScreenX, desc.rect.anchoredPosition, desc.rect, curves.moveCurve, 2));
+        desc.gameObject.SetActive(true);
+        desc.FillText(GetCorrectAnswer().gameIAm);
+
+
+        yield return new WaitForSeconds(1);
+
+        for (int i = 0; i < 3; i++)
+        {
+            uiGames[i].ownRect.gameObject.SetActive(false);
+            uiGames[i].ownRect.anchoredPosition += outOfScreenX;
+        }
+        yield return new WaitForSeconds(2.5f);
+
+        StartCoroutine(Util.MoveToPos(desc.rect.anchoredPosition, desc.rect.anchoredPosition + outOfScreenX, desc.rect, curves.moveCurve, 2));
+        yield return new WaitForSeconds(0.5f);
+
+        desc.rect.anchoredPosition -= outOfScreenX;
+        desc.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(0.5f);
+
+        BeginQuiz();
     }
 
 
@@ -310,6 +355,9 @@ public class QuizManager : MonoBehaviour {
         Debug.LogError("Found No Correct answer. Something must have gone wrong");
         return null;
     }
+    
+
+
 
 
     //DEBUG - ----------------------------
@@ -377,6 +425,47 @@ public class QuizManager : MonoBehaviour {
     }
 
 
+    public void CompareGameToCurGames(Game game)
+    {
+        print("Comparison With "+game.name + " --- : ");
+        string comparisonCorrect = "";
+        foreach(Game g in currentGames)
+        {
+           // s += g.name +":";
+            print(g.name);
+            foreach (KeyValuePair<QuizType,List<Feature>> lists in g.featureList)
+            {
+                if(g.featureList[lists.Key].Any(x => game.featureList[lists.Key].Any(y => y.Name == x.Name)))
+                {
+                    comparisonCorrect += g.name + " also has " + lists.Key.ToString() + " ";
+                    
+                }
+
+                string song = "["+lists.Key.ToString()+"] : ";
+                if (g.featureList.ContainsKey(lists.Key))
+                {
+                    foreach (Feature f in g.featureList[lists.Key])
+                    {
+                        song += f.Name + ", ";
+                    }
+                }
+                song += " --- --- ";
+                if (game.featureList.ContainsKey(lists.Key))
+                {
+                    foreach (Feature f in game.featureList[lists.Key])
+                    {
+                        song += f.Name + ", ";
+                    }
+                }
+                print(song);
+
+            }
+          //  s += ", ";
+        }
+        print(comparisonCorrect);
+    }
+
+
 
     public string FindQuestionString(QuizType type)
     {
@@ -409,6 +498,9 @@ public class QuizManager : MonoBehaviour {
                 break;
             case QuizType.People:
                 s = "{0} has something to do with one of these games. Which one?";
+                break;
+            case QuizType.Genre:
+                s = "Which of these games fall under the {0} Genre?";
                 break;
         }
 
@@ -447,6 +539,9 @@ public class QuizManager : MonoBehaviour {
                 break;
             case QuizType.People:
                 s = "these people touched it at least";
+                break;
+            case QuizType.Genre:
+                s = "is a";
                 break;
         }
 
