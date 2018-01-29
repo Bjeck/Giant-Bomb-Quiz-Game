@@ -31,10 +31,12 @@ public class GameDescription : MonoBehaviour, IPointerClickHandler {
     public void Reset()
     {
         descText.text = "";
+        descText.enabled = false;
     }
 
     public void FillText(Game g)
     {
+        descText.enabled = true;
         gameLink = g;
         descText.text = g.name + " (" + quiz.apiHandler.GetDate(g) + ")\n" + g.deck + "\n" + "Read more about the game " + "<color=#0000FF><link=\"gameURL\">" + "here" + "</link></color>";
     }

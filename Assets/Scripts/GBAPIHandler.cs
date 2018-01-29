@@ -30,7 +30,7 @@ public class GBAPIHandler : MonoBehaviour {
     // Use this for initialization
     void Start () {
         LoadGamesFromLocalFile();
-        StartPullQueue(2, GotData);
+        StartPullQueue(3, GotData);
     }
     
 

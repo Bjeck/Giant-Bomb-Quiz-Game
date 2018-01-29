@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Deck : MonoBehaviour {
 
-    public List<UIGame> games = new List<UIGame>();
+    public QuizManager quiz;
+
+    public List<DeckGame> games = new List<DeckGame>();
     public Sprite sprite;
     public GameObject uigamePrefab;
+
 
 	// Use this for initialization
 	void Start () {
@@ -24,14 +27,14 @@ public class Deck : MonoBehaviour {
     public void AddCard(UIGame game)
     {
         GameObject newgame = Instantiate(uigamePrefab, transform);
-        UIGame uigame = newgame.GetComponent<UIGame>();
+        DeckGame uigame = newgame.GetComponent<DeckGame>();
         uigame.gameIAm = game.gameIAm;
         Sprite sprite = game.spriteToUse;
-        uigame.Setup(uigame.gameIAm, sprite);
+        uigame.Setup(uigame.gameIAm, sprite, quiz);
         games.Add(uigame);
     }
 
-    public void RemoveCard(UIGame game)
+    public void RemoveCard(DeckGame game)
     {
         if (games.Contains(game))
         {
