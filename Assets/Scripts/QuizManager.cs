@@ -6,7 +6,7 @@ using TMPro;
 using System.Linq;
 
 
-public enum QuizType { Platform, Character, Concept, Location, Object, Theme, People, Developer, Publisher, Genre, Name }
+public enum QuizType { Platform, Character, KilledCharacter, Concept, Location, Object, Theme, People, Developer, Publisher, Genre, DLC, Name, Image }
 
 public class QuizManager : MonoBehaviour {
 
@@ -27,7 +27,9 @@ public class QuizManager : MonoBehaviour {
     public TextMeshProUGUI question;
     public QuizType quizType;
     public Feature featureAskedAboutInQuestion;
+    public Game gameImageWasFrom;
     public GameDescription desc;
+    public Image questionImage;
     public TextMeshProUGUI mashupGameText;
 
     public RectTransform correctAnswerMarker;
@@ -71,6 +73,7 @@ public class QuizManager : MonoBehaviour {
         desc.Reset();
         quizOn = true;
         correctAnswerMarker.gameObject.SetActive(false);
+        questionImage.gameObject.SetActive(false);
 
         List<Game> gamesToPickFrom = new List<Game>();
         gamesToPickFrom = apiHandler.pulledGames;
@@ -106,12 +109,20 @@ public class QuizManager : MonoBehaviour {
         List<QuizType> validTypes = new List<QuizType>();
         
         validTypes = TestForFeatures();
-      //  print("Can Pick from " + validTypes.Count + " categories");
+        if(TestForImages()) { validTypes.Add(QuizType.Image); }
+        
         QuizType typ = validTypes[Random.Range(0, validTypes.Count)];
         print(typ.ToString());
 
-        //currently only can choose a feature quiz
-        DisplayFeatureQuiz(typ);
+        if(typ == QuizType.Image)   //noot great
+        {
+            DisplayImageQuiz();
+        }
+        else
+        {
+            DisplayFeatureQuiz(typ);
+
+        }
 
         StartCoroutine(Util.MoveToPos(question.rectTransform.anchoredPosition - outOfScreenX, question.rectTransform.anchoredPosition, question.rectTransform, curves.moveCurve, 2));
 
@@ -123,6 +134,50 @@ public class QuizManager : MonoBehaviour {
         }
 
 
+    }
+
+    public void DisplayImageQuiz()
+    {
+        quizType = QuizType.Image;
+
+        List<Game> gamesToGuessFrom = new List<Game>();
+        foreach (Game r in currentGames)
+        {
+            if (r.images != null)
+            {
+                if(r.images.Count > 0)
+                {
+                    gamesToGuessFrom.Add(r);
+                }
+            }
+        }
+
+        Game g = gamesToGuessFrom[Random.Range(0, gamesToGuessFrom.Count)];
+
+        string imgURL = g.images[Random.Range(0, g.images.Count)].medium_url;
+        StartCoroutine(PullImage(imgURL));
+
+
+        string q = FindQuestionString(quizType);
+        q = string.Format(q, g.name);
+        PopulateQuestion(q, currentGames);
+
+        gameImageWasFrom = g;
+    }
+
+    IEnumerator PullImage(string url)
+    {
+        using (WWW www = new WWW(url))
+        {
+            yield return www;
+            Texture2D texture = new Texture2D(www.texture.width, www.texture.height, TextureFormat.DXT1, false);
+            www.LoadImageIntoTexture(texture);
+            Rect rec = new Rect(0, 0, texture.width, texture.height);
+            questionImage.sprite = Sprite.Create(texture, rec, new Vector2(0.5f, 0.5f), 100);
+            questionImage.gameObject.SetActive(true);
+
+            www.Dispose();
+        }
     }
 
 
@@ -176,6 +231,18 @@ public class QuizManager : MonoBehaviour {
         return typesToReturn;
     }
     
+    public bool TestForImages()
+    {
+        foreach(Game r in currentGames){
+            if(r.images != null){
+                if(r.images.Count > 0)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 
     public void PopulateQuestion(string q, List<Game> games)
@@ -192,20 +259,30 @@ public class QuizManager : MonoBehaviour {
 
     public void TestAnswer(UIGame game)
     {
-        foreach(KeyValuePair<QuizType,List<Feature>> f in game.gameIAm.featureList)
+        if(quizType == QuizType.Image)
         {
-            if(f.Key == quizType)
+            if(game.gameIAm.name == gameImageWasFrom.name)
             {
-                if (f.Value.Contains(featureAskedAboutInQuestion))
-                {
-                  //  print("Correct answer!");
-                    DoCorrectAnswer(game);
-                    return;
-                }
+                DoCorrectAnswer(game);
             }
         }
-        //if we get here, it was wrong answer
-        DoWrongAnswer(game);
+        else
+        {
+            foreach (KeyValuePair<QuizType, List<Feature>> f in game.gameIAm.featureList)
+            {
+                if (f.Key == quizType)
+                {
+                    if (f.Value.Contains(featureAskedAboutInQuestion))
+                    {
+                        //  print("Correct answer!");
+                        DoCorrectAnswer(game);
+                        return;
+                    }
+                }
+            }
+            //if we get here, it was wrong answer
+            DoWrongAnswer(game);
+        }
     }
 
     
@@ -226,8 +303,6 @@ public class QuizManager : MonoBehaviour {
         }
         // correctAnswerMarker.gameObject.SetActive(true);
         // correctAnswerMarker.anchoredPosition = game.GetComponent<RectTransform>().anchoredPosition;
-
-
     }
 
     public void DoWrongAnswer(UIGame selectedGame)
@@ -268,6 +343,10 @@ public class QuizManager : MonoBehaviour {
 
     IEnumerator EndQuizRoll()
     {
+        questionImage.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(0.2f);
+
         UIGame cor = GetCorrectAnswer();
         for (int i = 0; i < 3; i++)
         {
@@ -278,7 +357,7 @@ public class QuizManager : MonoBehaviour {
             }
             else
             {
-                StartCoroutine(Util.MoveToPos(uiGames[i].ownRect.anchoredPosition, uiGames[i].ownRect.anchoredPosition - outOfScreenY, uiGames[i].ownRect, curves.moveCurve, 1.2f, delay)); //move to deck. in theory.
+                StartCoroutine(Util.MoveToPos(uiGames[i].ownRect.anchoredPosition, uiGames[i].ownRect.anchoredPosition - outOfScreenY, uiGames[i].ownRect, curves.underShoot, 1.2f, delay)); 
             }
            // StartCoroutine(Util.WaitToDisable(uiGames[i].ownRect.gameObject, delay));
         }
@@ -329,25 +408,34 @@ public class QuizManager : MonoBehaviour {
                 }
             }
         }
-
-
         mashupGameText.text = text;
     }
 
-
-
-
+    
     public UIGame GetCorrectAnswer()
     {
-        for (int i = 0; i < 3; i++)
+        if (quizType == QuizType.Image)
         {
-            foreach (KeyValuePair<QuizType, List<Feature>> f in uiGames[i].gameIAm.featureList)
+            foreach (UIGame g in uiGames)
             {
-                if (f.Key == quizType)
+                if (g.gameIAm.name == gameImageWasFrom.name)
                 {
-                    if (f.Value.Contains(featureAskedAboutInQuestion))
+                    return g;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                foreach (KeyValuePair<QuizType, List<Feature>> f in uiGames[i].gameIAm.featureList)
+                {
+                    if (f.Key == quizType)
                     {
-                        return uiGames[i];
+                        if (f.Value.Contains(featureAskedAboutInQuestion))
+                        {
+                            return uiGames[i];
+                        }
                     }
                 }
             }
@@ -356,8 +444,7 @@ public class QuizManager : MonoBehaviour {
         return null;
     }
     
-
-
+    
 
 
     //DEBUG - ----------------------------
@@ -460,7 +547,6 @@ public class QuizManager : MonoBehaviour {
                 print(song);
 
             }
-          //  s += ", ";
         }
         print(comparisonCorrect);
     }
@@ -488,7 +574,7 @@ public class QuizManager : MonoBehaviour {
                 s = "Which of these games has a {0}?";
                 break;
             case QuizType.Theme:
-                s = "Which of these games is about {0}?";
+                s = "Which of these games is {0}?";
                 break;
             case QuizType.Developer:
                 s = "Which of these games was made by {0}?";
@@ -497,10 +583,19 @@ public class QuizManager : MonoBehaviour {
                 s = "Which of these games was published by {0}?";
                 break;
             case QuizType.People:
-                s = "{0} has something to do with one of these games. Which one?";
+                s = "{0} worked on or has a connection to one of these games. Which one?";
                 break;
             case QuizType.Genre:
                 s = "Which of these games fall under the {0} Genre?";
+                break;
+            case QuizType.DLC:
+                s = "The DLC {0} was for which game?";
+                break;
+            case QuizType.KilledCharacter:
+                s = "{0} died in one of these games. Which one?";
+                break;
+            case QuizType.Image:
+                s = "Which game is this image from?";
                 break;
         }
 
@@ -517,19 +612,19 @@ public class QuizManager : MonoBehaviour {
                 s = "Came out for the";
                 break;
             case QuizType.Character:
-                s = "Has the great characters of";
+                s = "stars";
                 break;
             case QuizType.Location:
                 s = "Takes place in";
                 break;
             case QuizType.Concept:
-                s = "Includes these wondrous concepts:";
+                s = "Includes";
                 break;
             case QuizType.Object:
-                s = "Has these objects:";
+                s = "Has";
                 break;
             case QuizType.Theme:
-                s = "has themes of";
+                s = "brings themes of";
                 break;
             case QuizType.Developer:
                 s = "was made by";
@@ -537,11 +632,17 @@ public class QuizManager : MonoBehaviour {
             case QuizType.Publisher:
                 s = "published by";
                 break;
-            case QuizType.People:
-                s = "these people touched it at least";
-                break;
             case QuizType.Genre:
                 s = "is a";
+                break;
+            case QuizType.People:
+                s = "and these nice people were there too:";
+                break;
+            case QuizType.DLC:
+                s = "future DLC includes";
+                break;
+            case QuizType.KilledCharacter:
+                s = "these characters will die:";
                 break;
         }
 

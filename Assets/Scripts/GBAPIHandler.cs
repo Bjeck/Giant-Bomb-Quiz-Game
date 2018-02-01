@@ -16,7 +16,7 @@ public class GBAPIHandler : MonoBehaviour {
     public int MAXNR = 59518;
     public int amtOfGamesToPull = 10;
 
-    string urlPost = "&format=JSON&limit=10&field_list=aliases,api_detail_url,characters,concepts,deck,developers,image,locations,name,objects,people,platforms,publishers,themes,expected_release_month,expected_release_quarter,expected_release_year,killed_characters,original_release_date,site_detail_url,genres";
+    string urlPost = "&format=JSON&limit=10&field_list=aliases,api_detail_url,characters,concepts,deck,developers,image,locations,name,objects,people,platforms,publishers,themes,expected_release_month,expected_release_quarter,expected_release_year,killed_characters,original_release_date,site_detail_url,genres,images";
     //string urlPost = "&format=JSON&limit=10&field_list=api_detail_url,deck,name";
     //expected_release_day expected release moth/quarter/year  first appearance characters/concepts/locations/objects/people, killed_characters, original_release_date site_detail_url, 
 
@@ -76,11 +76,6 @@ public class GBAPIHandler : MonoBehaviour {
     }
 
 
-    public void PullSingleFromGB(System.Action<bool, GBDataSingle> callback)
-    {
-        StartCoroutine(PullFromGBCo(GAMEURL + Random.Range(1,MAXNR) + "/?api_key=" + APIkey + urlPost, false, callback));
-    }
-
     public void StartPullQueue(float howMany, System.Action<bool, GBDataSingle> callback)
     {
         StartCoroutine(PullQueue(howMany, callback));
@@ -91,12 +86,12 @@ public class GBAPIHandler : MonoBehaviour {
     {
         for (int i = 0; i < howMany; i++)
         {
-            PullSingleFromGB(callback);
+            StartCoroutine(PullFromGBCo(GAMEURL + Random.Range(1, MAXNR) + "/?api_key=" + APIkey + urlPost, false, callback));
+
             yield return new WaitForSeconds(1f);
         }
     }
-
-
+    
 
     IEnumerator PullFromGBCo(string url, bool many, System.Action<bool, GBDataSingle> callback)
     {
@@ -182,26 +177,6 @@ public class GBAPIHandler : MonoBehaviour {
     }
 
 
-
-    public void FillGame(Game g)
-    {
-        g.featureList.Clear();
-
-        if (g.platforms != null) { g.featureList.Add(QuizType.Platform, g.platforms.OfType<Feature>().ToList()); } 
-        if (g.characters != null) { g.featureList.Add(QuizType.Character, g.characters.OfType<Feature>().ToList()); }
-        if (g.concepts != null) { g.featureList.Add(QuizType.Concept, g.concepts.OfType<Feature>().ToList()); }
-        if (g.locations != null) { g.featureList.Add(QuizType.Location, g.locations.OfType<Feature>().ToList()); }
-        if (g.objects != null) { g.featureList.Add(QuizType.Object, g.objects.OfType<Feature>().ToList()); }
-        if (g.themes != null) { g.featureList.Add(QuizType.Theme, g.themes.OfType<Feature>().ToList()); }
-        if (g.people != null) { g.featureList.Add(QuizType.People, g.people.OfType<Feature>().ToList()); }
-        if (g.developers != null) { g.featureList.Add(QuizType.Developer, g.developers.OfType<Feature>().ToList()); }
-        if (g.publishers != null) { g.featureList.Add(QuizType.Publisher, g.publishers.OfType<Feature>().ToList()); }
-        if (g.genres != null) { g.featureList.Add(QuizType.Genre, g.genres.OfType<Feature>().ToList()); }
-
-    }
-
-
-
     public string GetDate(Game g)
     {
         string date = ""; //format of original release date is: 1999-01-14 00:00:00
@@ -220,10 +195,27 @@ public class GBAPIHandler : MonoBehaviour {
         return date;
     }
 
+
+    public void FillGame(Game g)
+    {
+        g.featureList.Clear();
+
+        if (g.platforms != null) { g.featureList.Add(QuizType.Platform, g.platforms.OfType<Feature>().ToList()); }
+        if (g.characters != null) { g.featureList.Add(QuizType.Character, g.characters.OfType<Feature>().ToList()); }
+        if (g.concepts != null) { g.featureList.Add(QuizType.Concept, g.concepts.OfType<Feature>().ToList()); }
+        if (g.locations != null) { g.featureList.Add(QuizType.Location, g.locations.OfType<Feature>().ToList()); }
+        if (g.objects != null) { g.featureList.Add(QuizType.Object, g.objects.OfType<Feature>().ToList()); }
+        if (g.themes != null) { g.featureList.Add(QuizType.Theme, g.themes.OfType<Feature>().ToList()); }
+        if (g.people != null) { g.featureList.Add(QuizType.People, g.people.OfType<Feature>().ToList()); }
+        if (g.developers != null) { g.featureList.Add(QuizType.Developer, g.developers.OfType<Feature>().ToList()); }
+        if (g.publishers != null) { g.featureList.Add(QuizType.Publisher, g.publishers.OfType<Feature>().ToList()); }
+        if (g.genres != null) { g.featureList.Add(QuizType.Genre, g.genres.OfType<Feature>().ToList()); }
+        if (g.dlcs != null) { g.featureList.Add(QuizType.DLC, g.dlcs.OfType<Feature>().ToList()); }
+        if (g.killed_characters != null) { g.featureList.Add(QuizType.KilledCharacter, g.killed_characters.OfType<Feature>().ToList()); }
+
+    }
+
 }
-
-
-//expected_release_day expected release moth/quarter/year  first appearance characters/concepts/locations/objects/people, killed_characters, original_release_date site_detail_url, 
 
 
 [System.Serializable]
@@ -260,6 +252,7 @@ public class Game
     public string api_detail_url;
     public string site_detail_url;
     public string deck;
+    public string description;
     public GBImage image;
     public string name;
     public List<Platform> platforms = new List<Platform>();
@@ -272,6 +265,7 @@ public class Game
     public List<Developer> developers = new List<Developer>();
     public List<Publisher> publishers = new List<Publisher>();
     public List<Genre> genres = new List<Genre>();
+    public List<ListImage> images = new List<ListImage>();
 
     public List<FirstAppearancePerson> first_appearance_people = new List<FirstAppearancePerson>();
     public List<FirstAppearanceCharacter> first_appearance_characters = new List<FirstAppearanceCharacter>();
@@ -458,13 +452,29 @@ public class KilledCharacter
   //  public override string Name { get { return name; } set { name = value; } }
 }
 
+[System.Serializable]
 public class DLC
 {
-    public string api_detail_url { get; set; }
-    public int id { get; set; }
-    public string name { get; set; }
-    public string site_detail_url { get; set; }
+    public string api_detail_url;
+    public int id;
+    public string name;
+    public string site_detail_url;
 }
+
+[System.Serializable]
+public class ListImage
+{
+    public string icon_url;
+    public string medium_url;
+    public string screen_url;
+    public string small_url;
+    public string super_url;
+    public string thumb_url;
+    public string tiny_url;
+    public string original;
+    public string tags;
+}
+
 
 
 public static class JsonHelper
