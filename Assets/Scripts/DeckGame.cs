@@ -86,7 +86,6 @@ public class DeckGame : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
         m_Raycaster.Raycast(m_PointerEventData, results);
         foreach (RaycastResult result in results)
         {
-            Debug.Log("Hit " + result.gameObject.name);
             if (result.gameObject.CompareTag("UIGame"))
             {
                 GameComparison(result.gameObject.GetComponent<UIGame>().gameIAm);
@@ -102,15 +101,42 @@ public class DeckGame : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDrag
     {
         print("Comparison With " + g.name + " --- : ");
         string comparisonCorrect = "";
-        foreach (KeyValuePair<QuizType, List<Feature>> lists in g.featureList)
-        {
-            if (g.featureList[lists.Key].Any(x => g.featureList[lists.Key].Any(y => y.Name == x.Name)))
-            {
-                comparisonCorrect += g.name + " also has " + lists.Key.ToString() + " ";
 
+        List<Feature> featuresInOther = new List<Feature>();
+        foreach(KeyValuePair<QuizType, List<Feature>> lists in g.featureList)
+        {
+            foreach(Feature f in lists.Value)
+            {
+                featuresInOther.Add(f);
             }
-            
         }
+
+        List<Feature> featuresInMe = new List<Feature>();
+        foreach (KeyValuePair<QuizType, List<Feature>> lists in gameIAm.featureList)
+        {
+            foreach (Feature f in lists.Value)
+            {
+                featuresInMe.Add(f);
+            }
+        }
+
+        int c = Mathf.Min(featuresInMe.Count, featuresInOther.Count);
+
+        for (int i = 0; i < c; i++)
+        {
+            if(featuresInMe[i].Name == featuresInOther[i].Name)
+            {
+                comparisonCorrect += g.name + " also has " + featuresInOther[i].Name + ",";
+            }
+        }
+
+        //    foreach (KeyValuePair<QuizType, List<Feature>> lists in g.featureList)
+        //{
+        //    if (g.featureList[lists.Key].Any(x => g.featureList[lists.Key].Any(y => y.Name == x.Name)))
+        //    {
+        //    }
+
+        // }
         print(comparisonCorrect);
     }
 

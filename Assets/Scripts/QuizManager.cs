@@ -15,6 +15,7 @@ public class QuizManager : MonoBehaviour {
     public GBAPIHandler apiHandler;
 
     public Deck deck;
+    public Fader fader;
 
     public List<Game> currentGames = new List<Game>();
     
@@ -288,8 +289,6 @@ public class QuizManager : MonoBehaviour {
     
     public void DoCorrectAnswer(UIGame game)
     {
-        EndQuiz(game.gameIAm, true);
-
         foreach (UIGame g in uiGames)
         {
             if(g == game)
@@ -301,8 +300,9 @@ public class QuizManager : MonoBehaviour {
                 g.Win(false);
             }
         }
-        // correctAnswerMarker.gameObject.SetActive(true);
-        // correctAnswerMarker.anchoredPosition = game.GetComponent<RectTransform>().anchoredPosition;
+
+        EndQuiz(game.gameIAm, true);
+
     }
 
     public void DoWrongAnswer(UIGame selectedGame)
@@ -343,45 +343,83 @@ public class QuizManager : MonoBehaviour {
 
     IEnumerator EndQuizRoll()
     {
+        UIGame cor = GetCorrectAnswer();
+
         questionImage.gameObject.SetActive(false);
 
         yield return new WaitForSeconds(0.2f);
 
-        UIGame cor = GetCorrectAnswer();
+        StartCoroutine(Util.MoveToPos(question.rectTransform.anchoredPosition, question.rectTransform.anchoredPosition + outOfScreenX, question.rectTransform, curves.moveCurve, 2));
+
+        StartCoroutine(Util.Scale(Vector3.one, Vector3.one * 13, cor.shadow2, curves.upCurve, 0.8f));
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(Util.Scale(Vector3.one, Vector3.one * 13, cor.shadow1, curves.upCurve, 0.7f));
+        yield return new WaitForSeconds(0.1f);
+        StartCoroutine(Util.Scale(Vector3.one, Vector3.one * 13, cor.shadow0, curves.upCurve, 0.6f));
+
         for (int i = 0; i < 3; i++)
         {
-            float delay = Random.Range(0, 0.5f);
-            if(uiGames[i] != cor)
+            float delay = Random.Range(0.1f, 0.2f);
+            if (uiGames[i] != cor)
             {
-                StartCoroutine(Util.MoveToPos(uiGames[i].ownRect.anchoredPosition, uiGames[i].ownRect.anchoredPosition - outOfScreenX, uiGames[i].ownRect, curves.moveCurve, 1.2f, delay));
+                if(i == 0)
+                {
+                    StartCoroutine(Util.MoveToPos(uiGames[i].ownRect.anchoredPosition, uiGames[i].ownRect.anchoredPosition - outOfScreenX, uiGames[i].ownRect, curves.moveCurve, 1.2f, delay));
+                }
+                else if(i == 1)
+                {
+                    StartCoroutine(Util.MoveToPos(uiGames[i].ownRect.anchoredPosition, uiGames[i].ownRect.anchoredPosition - outOfScreenY, uiGames[i].ownRect, curves.moveCurve, 1.2f, delay));
+                }
+                else
+                {
+                    StartCoroutine(Util.MoveToPos(uiGames[i].ownRect.anchoredPosition, uiGames[i].ownRect.anchoredPosition + outOfScreenX, uiGames[i].ownRect, curves.moveCurve, 1.2f, delay));
+                }
             }
-            else
-            {
-                StartCoroutine(Util.MoveToPos(uiGames[i].ownRect.anchoredPosition, uiGames[i].ownRect.anchoredPosition - outOfScreenY, uiGames[i].ownRect, curves.underShoot, 1.2f, delay)); 
-            }
-           // StartCoroutine(Util.WaitToDisable(uiGames[i].ownRect.gameObject, delay));
         }
-        yield return new WaitForSeconds(0.5f);
+
+        yield return new WaitForSeconds(0.3f);
+
+        fader.Fade(GameColor.green);
+
+        yield return new WaitForSeconds(0.7f);
 
         StartCoroutine(Util.MoveToPos(desc.rect.anchoredPosition + outOfScreenX, desc.rect.anchoredPosition, desc.rect, curves.moveCurve, 2));
         desc.gameObject.SetActive(true);
         desc.FillText(GetCorrectAnswer().gameIAm);
 
+        
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
+
+
+        //for (int i = 0; i < 3; i++)
+        //{
+        //    uiGames[i].ownRect.gameObject.SetActive(false);
+        //    uiGames[i].ownRect.anchoredPosition += outOfScreenX;
+        //}
+        yield return new WaitForSeconds(2.5f);
+
+
+        StartCoroutine(Util.MoveToPos(desc.rect.anchoredPosition, desc.rect.anchoredPosition + outOfScreenX, desc.rect, curves.moveCurve, 2));
+
+        StartCoroutine(Util.MoveToPos(cor.ownRect.anchoredPosition, cor.ownRect.anchoredPosition - outOfScreenY, cor.ownRect, curves.underShoot, 1.2f));
+
+        yield return new WaitForSeconds(0.5f);
+
 
         for (int i = 0; i < 3; i++)
         {
             uiGames[i].ownRect.gameObject.SetActive(false);
             uiGames[i].ownRect.anchoredPosition += outOfScreenX;
         }
-        yield return new WaitForSeconds(2.5f);
 
-        StartCoroutine(Util.MoveToPos(desc.rect.anchoredPosition, desc.rect.anchoredPosition + outOfScreenX, desc.rect, curves.moveCurve, 2));
-        yield return new WaitForSeconds(0.5f);
+        fader.FadeOut(GameColor.green);
 
         desc.rect.anchoredPosition -= outOfScreenX;
         desc.gameObject.SetActive(false);
+        question.rectTransform.anchoredPosition -= outOfScreenX;
+        question.text = "";
+
 
         yield return new WaitForSeconds(0.5f);
 

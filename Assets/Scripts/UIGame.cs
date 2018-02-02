@@ -45,7 +45,9 @@ public class UIGame : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         gamename.text = gb.name;
         //Image!
         gamename.gameObject.SetActive(true);
-
+        shadow0.localScale = Vector3.one;
+        shadow1.localScale = Vector3.one;
+        shadow2.localScale = Vector3.one;
 
         StartCoroutine(PullingImage());
 
@@ -76,11 +78,11 @@ public class UIGame : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
             Rect rec = new Rect(0, 0, texture.width, texture.height);
             spriteToUse = Sprite.Create(texture, rec, new Vector2(0.5f, 0.5f), 100);
             gameIMG.sprite = spriteToUse;
-            print(gameObject.name + " pulled image from " + gameIAm.image.medium_url);
+            //print(gameObject.name + " pulled image from " + gameIAm.image.medium_url);
 
-            //shadow0IMG.sprite = spriteToUse;
-            //shadow1IMG.sprite = spriteToUse;
-            //shadow2IMG.sprite = spriteToUse;
+            shadow0IMG.sprite = spriteToUse;
+            shadow1IMG.sprite = spriteToUse;
+            shadow2IMG.sprite = spriteToUse;
 
 
             www.Dispose();
@@ -102,6 +104,7 @@ public class UIGame : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
             StartCoroutine(Util.Spin(shadow1, quiz.curves.upCurve, 1, 10, 360, false));
             StartCoroutine(Util.MoveToPos(new Vector2(-20, shadowoffSetHeight), startPos, shadow2, quiz.curves.upCurve, 1));
             StartCoroutine(Util.Spin(shadow2, quiz.curves.upCurve, 1, 20, 360, false));
+
         }
         else
         {
