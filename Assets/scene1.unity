@@ -1103,6 +1103,62 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 688774197}
+--- !u!1 &815517247
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 815517250}
+  - component: {fileID: 815517249}
+  - component: {fileID: 815517248}
+  m_Layer: 0
+  m_Name: Airconsole
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &815517248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 815517247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c62b1d2287ae1c149b9485c6bf8e36ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quiz: {fileID: 452186030}
+--- !u!114 &815517249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 815517247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e37d83ebce05ad74683fd3228dde9e7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  browserStartMode: 1
+  controllerHtml: {fileID: 4900000, guid: 5e8dabca2382f7b4c849ca802dd44579, type: 3}
+  autoScaleCanvas: 1
+--- !u!4 &815517250
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 815517247}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 303.23676, y: 121.79197, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &877917908
 Prefab:
   m_ObjectHideFlags: 0
@@ -1402,12 +1458,12 @@ Prefab:
     - target: {fileID: 114187120722890578, guid: f04eaa68e0542bc438e9955993bfd47d,
         type: 2}
       propertyPath: m_havePropertiesChanged
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114187120722890578, guid: f04eaa68e0542bc438e9955993bfd47d,
         type: 2}
       propertyPath: m_isInputParsingRequired
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114634096846945730, guid: f04eaa68e0542bc438e9955993bfd47d,
         type: 2}
@@ -1823,12 +1879,12 @@ Prefab:
     - target: {fileID: 114187120722890578, guid: f04eaa68e0542bc438e9955993bfd47d,
         type: 2}
       propertyPath: m_havePropertiesChanged
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114187120722890578, guid: f04eaa68e0542bc438e9955993bfd47d,
         type: 2}
       propertyPath: m_isInputParsingRequired
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1628147724973838, guid: f04eaa68e0542bc438e9955993bfd47d, type: 2}
       propertyPath: m_Name
