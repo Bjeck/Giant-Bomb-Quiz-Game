@@ -13,7 +13,7 @@ public class GBAPIHandler : MonoBehaviour {
     public string GAMEURL = "http://www.giantbomb.com/api/game/3030-";
     public string GAMESURL = "http://www.giantbomb.com/api/games";
 
-    public int MAXNR = 59518;
+    public int MAXNR = 59518;   //No longer used in script, but this is the highest number in the id.
     public int amtOfGamesToPull = 10;
 
     string urlPost = "&format=JSON&limit=10&field_list=aliases,api_detail_url,characters,concepts,deck,developers,image,locations,name,objects,people,platforms,publishers,themes,expected_release_month,expected_release_quarter,expected_release_year,killed_characters,original_release_date,site_detail_url,genres,images";
@@ -21,18 +21,88 @@ public class GBAPIHandler : MonoBehaviour {
     //expected_release_day expected release moth/quarter/year  first appearance characters/concepts/locations/objects/people, killed_characters, original_release_date site_detail_url, 
 
 
-    public string gamesJsonPath = "games";
+    string gamesJsonPath = "Assets/Resources/games.json";
+    string idPath = "Assets/Resources/ids.json";
 
-    
+
+
     public List<Game> pulledGames = new List<Game>();
 
-    
-    // Use this for initialization
-    void Start () {
+
+    public List<int> idsToPull = new List<int>();
+
+
+    private void Awake()
+    {
         LoadGamesFromLocalFile();
-        StartPullQueue(2, GotData);
+        LoadListofIDs();
+        //CreateListOfIDS();
     }
-    
+
+    // Use this for initialization
+    void Start ()
+    {
+        StartPullQueue(amtOfGamesToPull, GotData); 
+    }
+
+
+    void CreateListOfIDS()
+    {
+        idsToPull.Clear();
+        for (int i = 0; i < MAXNR; i++)
+        {
+            idsToPull.Add(i);
+        }
+
+        string json = JsonMapper.ToJson(idsToPull);
+        print(json);
+
+        File.WriteAllText(idPath, json);
+#if UNITY_EDITOR
+        //Re-import the file to update the reference in the editor
+        UnityEditor.AssetDatabase.ImportAsset(gamesJsonPath);
+#endif
+        
+    }
+
+
+    void LoadListofIDs()
+    {
+        TextAsset asset = Resources.Load<TextAsset>("ids");
+
+        idsToPull = JsonMapper.ToObject<List<int>>(asset.text);
+
+        print(idsToPull.Count);
+    }
+
+
+
+    void RemoveIDAndReWrite(List<int> ids)
+    {
+        for (int i = 0; i < ids.Count; i++)
+        {
+            if (idsToPull.Contains(ids[i]))
+            {
+                idsToPull.Remove(ids[i]);
+            }
+            print("removed " + ids[i] + " from ids ");
+
+        }
+
+        string json = JsonMapper.ToJson(idsToPull);
+
+        File.WriteAllText(idPath, json);
+#if UNITY_EDITOR
+        //Re-import the file to update the reference in the editor
+        UnityEditor.AssetDatabase.ImportAsset(gamesJsonPath);
+#endif
+
+        LoadListofIDs();
+
+    }
+
+
+
 
     public void LoadGamesFromLocalFile()
     {
@@ -51,8 +121,6 @@ public class GBAPIHandler : MonoBehaviour {
         {
             FillGame(pulledGames[i]);
         }
-
-        
     }
 
 
@@ -84,12 +152,18 @@ public class GBAPIHandler : MonoBehaviour {
 
     IEnumerator PullQueue(float howMany, System.Action<bool, GBDataSingle> callback)
     {
+        print("start queue with " + howMany);
+        List<int> idsToRemove = new List<int>();
         for (int i = 0; i < howMany; i++)
         {
-            StartCoroutine(PullFromGBCo(GAMEURL + Random.Range(1, MAXNR) + "/?api_key=" + APIkey + urlPost, false, callback));
+            int gameID = idsToPull[Random.Range(1, idsToPull.Count)];
+            StartCoroutine(PullFromGBCo(GAMEURL + gameID + "/?api_key=" + APIkey + urlPost, false, callback));
+            idsToRemove.Add(gameID);
 
             yield return new WaitForSeconds(1f);
         }
+
+        RemoveIDAndReWrite(idsToRemove);
     }
     
 

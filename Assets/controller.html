@@ -24,6 +24,15 @@
           console.log("Vibrating: " + data.vibrate);
         }
       };
+
+
+	  airconsole.onMessage = function(from, data) {
+		  if(data.game1){
+			document.getElementById('button1Text').innerHTML = data.game1;
+			document.getElementById('button2Text').innerHTML = data.game2;
+			document.getElementById('button3Text').innerHTML = data.game3;	  
+		  }
+	  };
     }
 
     /**
@@ -53,7 +62,7 @@
 
     .button {
       display: inline-block;
-      height: 45%;
+      height: 30%;
       width: 98%;
       background-color: #222;
       position: relative;
@@ -78,13 +87,18 @@
   </style>
 </head>
 <body onload="init()">
+
 <div style="height: 1%"></div>
-<div class=button ontouchstart="pick(1)">
-  <div class="button_label">Pick 1</div>
+<div class=button ontouchstart="pick(1)" id="button1" >
+  <div class="button_label" id="button1Text">Pick 1</div>
 </div>
-<div style="height: 8%"></div>
-<div class=button ontouchstart="pick(2)">
-	<div class="button_label">Pick 2</div>
+<div style="height: 4%"></div>
+<div class=button ontouchstart="pick(2)" id="button2" >
+	<div class="button_label" id="button2Text">Pick 2</div>
+</div>
+<div style="height: 4%"></div>
+<div class=button ontouchstart="pick(3)" id="button3" >
+	<div class="button_label" id="button3Text" >Pick 3</div>
 </div>
 </body>
 </html>

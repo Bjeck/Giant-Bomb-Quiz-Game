@@ -17,6 +17,8 @@ public class QuizManager : MonoBehaviour {
     public Deck deck;
     public Fader fader;
 
+    public AirConsoleController airconsole;
+
     public List<Game> currentGames = new List<Game>();
     
     public RectTransform canvasRect;
@@ -45,24 +47,33 @@ public class QuizManager : MonoBehaviour {
     public Game mashupGame;
 
     public int wrongChoiceCounter = 0;
-    
-	// Use this for initialization
-	void Start () {
+
+    // Use this for initialization
+    void Start()
+    {
         outOfScreenX = new Vector2(canvasRect.sizeDelta.x, 0);
         outOfScreenY = new Vector2(0, canvasRect.sizeDelta.y);
         quizObj.gameObject.SetActive(false);
-        
+
+        //StartCoroutine(WaitToStart());
+
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
 
         if (Input.GetKeyDown(KeyCode.Space) && !quizOn)
         {
             BeginQuiz();
         }
-	}
+    }
     
+    IEnumerator WaitToStart()
+    {
+        yield return new WaitForSeconds(1);
+        BeginQuiz();
+
+    }
 
 
     public void BeginQuiz()
@@ -255,6 +266,8 @@ public class QuizManager : MonoBehaviour {
             uiGames[i].Setup(games[i]);
         }
 
+        airconsole.MessageControllersGameNames(uiGames);
+
     }
     
 
@@ -275,12 +288,13 @@ public class QuizManager : MonoBehaviour {
                 {
                     if (f.Value.Contains(featureAskedAboutInQuestion))
                     {
-                        //  print("Correct answer!");
+                        print("Correct answer!");
                         DoCorrectAnswer(game);
                         return;
                     }
                 }
             }
+            print("wrong answer");
             //if we get here, it was wrong answer
             DoWrongAnswer(game);
         }

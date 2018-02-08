@@ -380,6 +380,7 @@ MonoBehaviour:
   apiHandler: {fileID: 1838874135}
   deck: {fileID: 1296948131}
   fader: {fileID: 261185252}
+  airconsole: {fileID: 815517248}
   currentGames: []
   canvasRect: {fileID: 452186034}
   quizObj: {fileID: 1477307869}
@@ -2481,9 +2482,9 @@ MonoBehaviour:
   GAMEURL: http://www.giantbomb.com/api/game/3030-
   GAMESURL: http://www.giantbomb.com/api/games
   MAXNR: 57213
-  amtOfGamesToPull: 10
-  gamesJsonPath: Assets/Resources/games.json
+  amtOfGamesToPull: 0
   pulledGames: []
+  idsToPull: 
 --- !u!4 &1838874136
 Transform:
   m_ObjectHideFlags: 0

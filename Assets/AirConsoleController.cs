@@ -24,6 +24,28 @@ public class AirConsoleController : MonoBehaviour {
 
     }
 
+    public void MessageControllersGameNames(UIGame[] games)
+    {
+        var message = new
+        {
+            game1 = games[0].gameIAm.name,
+            game2 = games[1].gameIAm.name,
+            game3 = games[2].gameIAm.name
+        };
+
+        AirConsole.instance.Broadcast(message);
+    }
+
+    public void MessageControllers()
+    {
+
+        var message = new
+        {
+        };
+
+        AirConsole.instance.Message(1, message);
+    }
+
 
     void TranslateInputToGame(JToken data)
     {
