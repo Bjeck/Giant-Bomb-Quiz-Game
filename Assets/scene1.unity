@@ -1133,6 +1133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   quiz: {fileID: 452186030}
+  amountOfPlayers: 0
 --- !u!114 &815517249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2482,7 +2483,7 @@ MonoBehaviour:
   GAMEURL: http://www.giantbomb.com/api/game/3030-
   GAMESURL: http://www.giantbomb.com/api/games
   MAXNR: 57213
-  amtOfGamesToPull: 0
+  amtOfGamesToPull: 100
   pulledGames: []
   idsToPull: 
 --- !u!4 &1838874136

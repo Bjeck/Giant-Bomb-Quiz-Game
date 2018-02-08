@@ -75,6 +75,11 @@ public class QuizManager : MonoBehaviour {
 
     }
 
+    public void BeginGame()
+    {
+        airconsole.SetupGameStart();
+        BeginQuiz();
+    }
 
     public void BeginQuiz()
     {
