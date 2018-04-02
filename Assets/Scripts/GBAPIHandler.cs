@@ -25,10 +25,10 @@ public class GBAPIHandler : MonoBehaviour {
     string idPath = "Assets/Resources/ids.json";
 
 
-
+    [HideInInspector]
     public List<Game> pulledGames = new List<Game>();
 
-
+    [HideInInspector]
     public List<int> idsToPull = new List<int>();
 
 
@@ -84,8 +84,9 @@ public class GBAPIHandler : MonoBehaviour {
             if (idsToPull.Contains(ids[i]))
             {
                 idsToPull.Remove(ids[i]);
+                print("removed " + ids[i] + " from ids ");
             }
-            print("removed " + ids[i] + " from ids ");
+            
 
         }
 
@@ -292,7 +293,7 @@ public class GBAPIHandler : MonoBehaviour {
 }
 
 
-[System.Serializable]
+[HideInInspector][System.Serializable]
 public class GBData
 {
     public string error;
@@ -301,31 +302,32 @@ public class GBData
     public int status_code;
 }
 
-[System.Serializable]
+[HideInInspector][System.Serializable]
 public class GBDataSingle : GBData
 {
     public Game results = new Game();
 }
 
-[System.Serializable]
+[HideInInspector][System.Serializable]
 public class GBDataMany : GBData
 {
     public List<Game> results = new List<Game>();
 }
 
-
+[HideInInspector]
 public class GameListLocal
 {
     public List<Game> Items = new List<Game>();
 }
 
-[System.Serializable]
+[HideInInspector][System.Serializable]
 public class Game
 {
     public object aliases;
     public string api_detail_url;
     public string site_detail_url;
     public string deck;
+    [HideInInspector]
     public string description;
     public GBImage image;
     public string name;

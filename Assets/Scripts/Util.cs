@@ -675,12 +675,12 @@ public static class ExtensionMethods{
 
 	public static bool IsClicked(this Rect rect){
 		Event e = Event.current;
-		return rect.Contains (e.mousePosition) && e.type == EventType.mouseDown && e.button == 0;
+		return rect.Contains (e.mousePosition) && e.type == EventType.MouseDown && e.button == 0;
 	}
 
 	public static bool IsRightClicked(this Rect rect){
 		Event e = Event.current;
-		return rect.Contains (e.mousePosition) && e.type == EventType.mouseDown && e.button == 1;
+		return rect.Contains (e.mousePosition) && e.type == EventType.MouseDown && e.button == 1;
 	}
 
 	public static bool IsHovered(this Rect rect){

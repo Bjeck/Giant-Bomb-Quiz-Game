@@ -10,6 +10,8 @@ public enum QuizType { Platform, Character, KilledCharacter, Concept, Location, 
 
 public class QuizManager : MonoBehaviour {
 
+    public bool MOBILEMODE = false;
+
     public Curves curves;
 
     public GBAPIHandler apiHandler;
@@ -26,6 +28,8 @@ public class QuizManager : MonoBehaviour {
 
     public UIGame[] uiGames = new UIGame[3];
     public CanvasGroup cGroup;
+
+    public Text airconsoleStatusText;
 
     public TextMeshProUGUI question;
     public QuizType quizType;
@@ -48,6 +52,8 @@ public class QuizManager : MonoBehaviour {
 
     public int wrongChoiceCounter = 0;
 
+    public int markedAnswers = 0;
+
     // Use this for initialization
     void Start()
     {
@@ -64,10 +70,18 @@ public class QuizManager : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Space) && !quizOn)
         {
-            BeginQuiz();
+            BeginGame();
         }
     }
-    
+
+    //called when airconsole is ready
+    public void ReadyToPlay()
+    {
+        print("ready to play!");
+        airconsoleStatusText.text = "ready";
+    }
+
+
     IEnumerator WaitToStart()
     {
         yield return new WaitForSeconds(1);
@@ -77,7 +91,10 @@ public class QuizManager : MonoBehaviour {
 
     public void BeginGame()
     {
-        airconsole.SetupGameStart();
+        if (MOBILEMODE)
+        {
+            airconsole.SetupGameStart();
+        }
         BeginQuiz();
     }
 
@@ -89,6 +106,7 @@ public class QuizManager : MonoBehaviour {
         cGroup.interactable = true;
         desc.Reset();
         quizOn = true;
+        markedAnswers = 0;
         correctAnswerMarker.gameObject.SetActive(false);
         questionImage.gameObject.SetActive(false);
 
@@ -271,16 +289,64 @@ public class QuizManager : MonoBehaviour {
             uiGames[i].Setup(games[i]);
         }
 
-        airconsole.MessageControllersGameNames(uiGames);
+        if (MOBILEMODE)
+        {
+            airconsole.MessageControllersGameNames(uiGames);
+        }
 
     }
     
-
-    public void TestAnswer(UIGame game)
+    public void MarkAnswerForPlayer(Player player, UIGame answer)
     {
-        if(quizType == QuizType.Image)
+        player.SetGame(answer);
+        print("player " + player.id + " just marked " + answer.gameIAm.name + " as their answer");
+        markedAnswers++;
+
+        if(markedAnswers == airconsole.players.Count)
         {
-            if(game.gameIAm.name == gameImageWasFrom.name)
+            LockAnswers();
+        }
+    }
+
+    
+
+
+    public void LockAnswers()
+    {
+        for (int i = 0; i < airconsole.amountOfPlayers; i++)
+        {
+            if (TestAnswer(airconsole.players[i].game))
+            {
+                //they got the right answer! wooh!
+                print("player " + i + " got the right answer with " + airconsole.players[i].game.gameIAm.name);
+            }
+            else
+            {
+                print("player " + i + " guessed wrong with " + airconsole.players[i].game.gameIAm.name);
+            }
+        }
+    }
+
+
+    public bool TestAnswer(UIGame game)
+    {
+        if (MOBILEMODE)
+        {
+            return TestAnswerMobile(game);
+        }
+        else
+        {
+            TestAnswerDesktop(game);
+            return true;
+        }
+    }
+
+    //OLD this needs to be reworked to test all answers for all players. OR PLACED IN single-player mode.
+    public void TestAnswerDesktop(UIGame game)
+    {
+        if (quizType == QuizType.Image)
+        {
+            if (game.gameIAm.name == gameImageWasFrom.name)
             {
                 DoCorrectAnswer(game);
             }
@@ -305,7 +371,32 @@ public class QuizManager : MonoBehaviour {
         }
     }
 
-    
+    public bool TestAnswerMobile(UIGame game)
+    {
+        if (quizType == QuizType.Image)
+        {
+            if (game.gameIAm.name == gameImageWasFrom.name)
+            {
+                return true;
+            }
+        }
+        else
+        {
+            foreach (KeyValuePair<QuizType, List<Feature>> f in game.gameIAm.featureList)
+            {
+                if (f.Key == quizType)
+                {
+                    if (f.Value.Contains(featureAskedAboutInQuestion))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
     public void DoCorrectAnswer(UIGame game)
     {
         foreach (UIGame g in uiGames)
@@ -678,7 +769,7 @@ public class QuizManager : MonoBehaviour {
                 s = "Includes";
                 break;
             case QuizType.Object:
-                s = "Has";
+                s = "has";
                 break;
             case QuizType.Theme:
                 s = "brings themes of";
@@ -693,7 +784,7 @@ public class QuizManager : MonoBehaviour {
                 s = "is a";
                 break;
             case QuizType.People:
-                s = "and these nice people were there too:";
+                s = "and these people were involved:";
                 break;
             case QuizType.DLC:
                 s = "future DLC includes";
