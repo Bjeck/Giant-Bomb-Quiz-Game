@@ -2726,7 +2726,7 @@ MonoBehaviour:
   GAMEURL: http://www.giantbomb.com/api/game/3030-
   GAMESURL: http://www.giantbomb.com/api/games
   MAXNR: 57213
-  amtOfGamesToPull: 0
+  amtOfGamesToPull: 100
   pulledGames: []
   idsToPull: 
 --- !u!4 &1838874136
