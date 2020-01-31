@@ -10,6 +10,7 @@ public class GameDescription : MonoBehaviour, IPointerClickHandler {
     [SerializeField] QuizManager quiz;
     public RectTransform rect;
     TextMeshProUGUI descText;
+    [SerializeField] TextMeshProUGUI pressSpaceToContinueText;
     Canvas canvas;
     Camera camera;
     Game gameLink;
@@ -32,11 +33,13 @@ public class GameDescription : MonoBehaviour, IPointerClickHandler {
     {
         descText.text = "";
         descText.enabled = false;
+        pressSpaceToContinueText.enabled = false;
     }
 
     public void FillText(Game g)
     {
         descText.enabled = true;
+        pressSpaceToContinueText.enabled = true;
         gameLink = g;
         descText.text = g.name + " (" + quiz.apiHandler.GetDate(g) + ")\n" + g.deck + "\n" + "Read more about the game " + "<color=#0000FF><link=\"gameURL\">" + "here" + "</link></color>";
     }

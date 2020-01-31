@@ -270,7 +270,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 687778177}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: { fileID: 1453722849, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
+  m_Script: { fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -284,8 +284,8 @@ MonoBehaviour:
   m_text: Select Words or Links to interact with them or Hold Shift Key to interact
     with individual Characters.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 715b80e429c437e40867928a4e1fc975, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 33db60c37b63f08448ded4b385e74e38, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -432,10 +432,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 694875406}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: { fileID: 1453722849, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
+  m_Script: { fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 2100000, guid: c26f698d4eee19e4a8b8f42cd299bab5, type: 2}
+  m_Material: {fileID: 2100000, guid: f2dcf029949142e28b974630369c8b4e, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
@@ -443,10 +443,10 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_fontAsset: {fileID: 11400000, guid: 808aa8f1ab804104aa7d0c337a6c1481, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
   m_spriteAsset: {fileID: 0}
   m_material: {fileID: 0}
-  m_sharedMaterial: {fileID: 2100000, guid: c26f698d4eee19e4a8b8f42cd299bab5, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: f2dcf029949142e28b974630369c8b4e, type: 2}
   m_isDefaultMaterial: 1
   m_padding: 5.96000004
   m_canvasRenderer: {fileID: 694875409}
@@ -485,10 +485,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 934502347}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f499ff45b9a3d0840a0df48d01b2877b, type: 3}
+  m_Script: {fileID: 11500000, guid: a05dcd8be7ec4ccbb35c26219884aa37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextPopup_Prefab_01: {fileID: 22450954, guid: c879e892866c8db4f8930b25672233ac,
+  TextPopup_Prefab_01: {fileID: 22450954, guid: b06f0e6c1dfa4356ac918da1bb32c603,
     type: 2}
 --- !u!114 &934502349
 MonoBehaviour:
@@ -498,7 +498,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 934502347}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5eeee4467ee5b6a4884a1ec94812d93e, type: 3}
+  m_Script: {fileID: 11500000, guid: 21256c5b62f346f18640dad779911e20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShowCharacters: 0
@@ -518,7 +518,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 934502347}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: { fileID: 1453722849, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
+  m_Script: { fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -536,8 +536,8 @@ MonoBehaviour:
     <<#ffff00>/link</color>> tag allows adding <link="id_02"><u><i><#80ff80>links</color></i></u></link>
     within a text object in <font="Bangers SDF">TextMesh<#40a0ff>Pro!</font>'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 715b80e429c437e40867928a4e1fc975, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 33db60c37b63f08448ded4b385e74e38, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

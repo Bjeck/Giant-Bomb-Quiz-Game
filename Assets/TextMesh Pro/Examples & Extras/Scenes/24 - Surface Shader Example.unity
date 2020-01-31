@@ -125,7 +125,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: e177c46c2a091564d88df2c2ca9dcf97, type: 2}
+  - {fileID: 2100000, guid: e6b9b44320f4448d9d5e0ee634259966, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -188,7 +188,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: e177c46c2a091564d88df2c2ca9dcf97, type: 2}
+  - {fileID: 2100000, guid: e6b9b44320f4448d9d5e0ee634259966, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -262,7 +262,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 9ed9aa864ec2d7f4dad266b9534c6d85, type: 2}
+  - {fileID: 2100000, guid: aadd5a709a48466c887296bb5b1b8110, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -324,7 +324,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 151148667}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: { fileID: -806885394, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
+  m_Script: { fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -337,8 +337,8 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: The Ultimate Text Solution for Unity
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d62a573c923f5cb47b8ff65261033b90, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: e2da38ead8f8238449c54a1ef49e080f, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: e6b276ec991f467aa14ef1f3cc665993, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -453,7 +453,7 @@ MeshRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_Materials:
-  - {fileID: 2100000, guid: e2da38ead8f8238449c54a1ef49e080f, type: 2}
+  - {fileID: 2100000, guid: e6b276ec991f467aa14ef1f3cc665993, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -547,7 +547,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 181840061}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e7872ff51989434dabf7807265ada3c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f19c7f94c794c5097d8bd11e39c750d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SpinSpeed: 1.25
@@ -637,7 +637,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: e177c46c2a091564d88df2c2ca9dcf97, type: 2}
+  - {fileID: 2100000, guid: e6b9b44320f4448d9d5e0ee634259966, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -768,7 +768,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 280649733}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9f0e07aefca0cc459134ff9df622278, type: 3}
+  m_Script: {fileID: 11500000, guid: 2d687537154440a3913a9a3c7977978c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CameraTarget: {fileID: 914799696}
@@ -793,7 +793,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 280649733}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0357609254b68d4881cab18f04dd4dc, type: 3}
+  m_Script: {fileID: 11500000, guid: 686ec78b56aa445795335fbadafcfaa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   UpdateInterval: 1
@@ -868,7 +868,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: e177c46c2a091564d88df2c2ca9dcf97, type: 2}
+  - {fileID: 2100000, guid: e6b9b44320f4448d9d5e0ee634259966, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -955,7 +955,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1041320347}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e7872ff51989434dabf7807265ada3c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f19c7f94c794c5097d8bd11e39c750d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SpinSpeed: 1.5
@@ -1030,7 +1030,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1079961348}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e7872ff51989434dabf7807265ada3c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f19c7f94c794c5097d8bd11e39c750d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SpinSpeed: 1
@@ -1180,7 +1180,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: e177c46c2a091564d88df2c2ca9dcf97, type: 2}
+  - {fileID: 2100000, guid: e6b9b44320f4448d9d5e0ee634259966, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -1243,7 +1243,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: e177c46c2a091564d88df2c2ca9dcf97, type: 2}
+  - {fileID: 2100000, guid: e6b9b44320f4448d9d5e0ee634259966, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -1359,7 +1359,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1142730609}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e7872ff51989434dabf7807265ada3c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f19c7f94c794c5097d8bd11e39c750d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SpinSpeed: 2
@@ -1390,7 +1390,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1185126715}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e7872ff51989434dabf7807265ada3c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f19c7f94c794c5097d8bd11e39c750d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SpinSpeed: 0
@@ -1510,7 +1510,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: e177c46c2a091564d88df2c2ca9dcf97, type: 2}
+  - {fileID: 2100000, guid: e6b9b44320f4448d9d5e0ee634259966, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -1570,7 +1570,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1328606984}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e7872ff51989434dabf7807265ada3c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f19c7f94c794c5097d8bd11e39c750d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SpinSpeed: 2.5
@@ -1678,7 +1678,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: e177c46c2a091564d88df2c2ca9dcf97, type: 2}
+  - {fileID: 2100000, guid: e6b9b44320f4448d9d5e0ee634259966, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -1765,7 +1765,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: e177c46c2a091564d88df2c2ca9dcf97, type: 2}
+  - {fileID: 2100000, guid: e6b9b44320f4448d9d5e0ee634259966, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -1825,7 +1825,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1625386226}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e7872ff51989434dabf7807265ada3c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f19c7f94c794c5097d8bd11e39c750d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SpinSpeed: 1.5
@@ -1944,7 +1944,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1743864370}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5e7872ff51989434dabf7807265ada3c, type: 3}
+  m_Script: {fileID: 11500000, guid: 4f19c7f94c794c5097d8bd11e39c750d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SpinSpeed: 2
@@ -1977,7 +1977,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1746165346}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: { fileID: -806885394, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
+  m_Script: { fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -1990,8 +1990,8 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_text: <size=125%>T</size>ext<size=125%>M</size>esh<sup> <#50aaff>PRO!</color></sup>
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 808aa8f1ab804104aa7d0c337a6c1481, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 4fb51aa7001a2244395ddf6a15d37389, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: f4e195ac1e204eff960149d1cb34e18c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2106,7 +2106,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4fb51aa7001a2244395ddf6a15d37389, type: 2}
+  - {fileID: 2100000, guid: f4e195ac1e204eff960149d1cb34e18c, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1

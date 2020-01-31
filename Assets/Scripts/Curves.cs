@@ -9,6 +9,7 @@ public class Curves : MonoBehaviour {
     public AnimationCurve moveCurve;
     public AnimationCurve insanityOvershoot;
     public AnimationCurve underShoot;
+    public AnimationCurve hangingUndershoot;
     public AnimationCurve smooth;
 
 

@@ -19,7 +19,7 @@ public class QuizManager : MonoBehaviour {
     public Deck deck;
     public Fader fader;
 
-    public AirConsoleController airconsole;
+ //   public AirConsoleController airconsole;
 
     public List<Game> currentGames = new List<Game>();
     
@@ -52,7 +52,11 @@ public class QuizManager : MonoBehaviour {
 
     public int wrongChoiceCounter = 0;
 
-    public int markedAnswers = 0;
+    public int markedAnswers = 0; 
+
+    public Queue<QuizType> previouslyAskedQuestions = new Queue<QuizType>();
+
+    bool progressToNextQuestion = false;
 
     // Use this for initialization
     void Start()
@@ -61,16 +65,25 @@ public class QuizManager : MonoBehaviour {
         outOfScreenY = new Vector2(0, canvasRect.sizeDelta.y);
         quizObj.gameObject.SetActive(false);
 
-        //StartCoroutine(WaitToStart());
-
+        StartCoroutine(WaitToStart());
     }
 
     // Update is called once per frame
     void Update () {
 
-        if (Input.GetKeyDown(KeyCode.Space) && !quizOn)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            BeginGame();
+            progressToNextQuestion = true;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            rawText.gameObject.SetActive(!rawText.gameObject.activeInHierarchy);
         }
     }
 
@@ -93,7 +106,7 @@ public class QuizManager : MonoBehaviour {
     {
         if (MOBILEMODE)
         {
-            airconsole.SetupGameStart();
+        //    airconsole.SetupGameStart();
         }
         BeginQuiz();
     }
@@ -146,10 +159,12 @@ public class QuizManager : MonoBehaviour {
         validTypes = TestForFeatures();
         if(TestForImages()) { validTypes.Add(QuizType.Image); }
         
-        QuizType typ = validTypes[Random.Range(0, validTypes.Count)];
+        QuizType typ = FindFeatureToAskAbout(validTypes);
         print(typ.ToString());
 
-        if(typ == QuizType.Image)   //noot great
+        AddTypeToPreviousTypes(typ);
+
+        if (typ == QuizType.Image)   //noot great
         {
             DisplayImageQuiz();
         }
@@ -167,9 +182,33 @@ public class QuizManager : MonoBehaviour {
             StartCoroutine(Util.MoveToPos(uiGames[i].ownRect.anchoredPosition + outOfScreenX, uiGames[i].ownRect.anchoredPosition, uiGames[i].ownRect, curves.moveCurve, 1.2f, delay));
             StartCoroutine(Util.WaitToEnable(uiGames[i].ownRect.gameObject, delay));
         }
-
-
     }
+
+
+    QuizType FindFeatureToAskAbout(List<QuizType> listOfValidTypes)
+    {
+        List<QuizType> removedPreviousQuestions = listOfValidTypes.Except(previouslyAskedQuestions).ToList();
+
+        if(removedPreviousQuestions.Count == 0)
+        {
+            return listOfValidTypes[Random.Range(0, listOfValidTypes.Count)]; //return random. We've asked about all these things before...
+        }
+        else
+        {
+            return removedPreviousQuestions[Random.Range(0, removedPreviousQuestions.Count)]; //return random. We've asked about all these things before...
+        }
+    }
+
+    void AddTypeToPreviousTypes(QuizType typ)
+    {
+        previouslyAskedQuestions.Enqueue(typ);
+
+        if(previouslyAskedQuestions.Count > 5)
+        {
+            previouslyAskedQuestions.Dequeue();
+        }
+    }
+
 
     public void DisplayImageQuiz()
     {
@@ -240,7 +279,10 @@ public class QuizManager : MonoBehaviour {
         string q = FindQuestionString(quizType);
         q = string.Format(q, theOne.Name);
         PopulateQuestion(q, currentGames);
+
+
     }
+
 
 
     public List<QuizType> TestForFeatures()
@@ -291,7 +333,7 @@ public class QuizManager : MonoBehaviour {
 
         if (MOBILEMODE)
         {
-            airconsole.MessageControllersGameNames(uiGames);
+         //   airconsole.MessageControllersGameNames(uiGames);
         }
 
     }
@@ -302,30 +344,30 @@ public class QuizManager : MonoBehaviour {
         print("player " + player.id + " just marked " + answer.gameIAm.name + " as their answer");
         markedAnswers++;
 
-        if(markedAnswers == airconsole.players.Count)
-        {
-            LockAnswers();
-        }
+        //if(markedAnswers == airconsole.players.Count)
+        //{
+        //    LockAnswers();
+        //}
     }
 
     
 
 
-    public void LockAnswers()
-    {
-        for (int i = 0; i < airconsole.amountOfPlayers; i++)
-        {
-            if (TestAnswer(airconsole.players[i].game))
-            {
-                //they got the right answer! wooh!
-                print("player " + i + " got the right answer with " + airconsole.players[i].game.gameIAm.name);
-            }
-            else
-            {
-                print("player " + i + " guessed wrong with " + airconsole.players[i].game.gameIAm.name);
-            }
-        }
-    }
+    //public void LockAnswers()
+    //{
+    //    for (int i = 0; i < airconsole.amountOfPlayers; i++)
+    //    {
+    //        if (TestAnswer(airconsole.players[i].game))
+    //        {
+    //            //they got the right answer! wooh!
+    //            print("player " + i + " got the right answer with " + airconsole.players[i].game.gameIAm.name);
+    //        }
+    //        else
+    //        {
+    //            print("player " + i + " guessed wrong with " + airconsole.players[i].game.gameIAm.name);
+    //        }
+    //    }
+    //}
 
 
     public bool TestAnswer(UIGame game)
@@ -435,6 +477,7 @@ public class QuizManager : MonoBehaviour {
     {
         cGroup.interactable = false;
         quizOn = false;
+        progressToNextQuestion = false;
         
         deck.AddCard(GetCorrectAnswer());
         
@@ -472,18 +515,7 @@ public class QuizManager : MonoBehaviour {
             float delay = Random.Range(0.1f, 0.2f);
             if (uiGames[i] != cor)
             {
-                if(i == 0)
-                {
-                    StartCoroutine(Util.MoveToPos(uiGames[i].ownRect.anchoredPosition, uiGames[i].ownRect.anchoredPosition - outOfScreenX, uiGames[i].ownRect, curves.moveCurve, 1.2f, delay));
-                }
-                else if(i == 1)
-                {
-                    StartCoroutine(Util.MoveToPos(uiGames[i].ownRect.anchoredPosition, uiGames[i].ownRect.anchoredPosition - outOfScreenY, uiGames[i].ownRect, curves.moveCurve, 1.2f, delay));
-                }
-                else
-                {
-                    StartCoroutine(Util.MoveToPos(uiGames[i].ownRect.anchoredPosition, uiGames[i].ownRect.anchoredPosition + outOfScreenX, uiGames[i].ownRect, curves.moveCurve, 1.2f, delay));
-                }
+                StartCoroutine(Util.MoveToPos(uiGames[i].ownRect.anchoredPosition, uiGames[i].ownRect.anchoredPosition - outOfScreenX, uiGames[i].ownRect, curves.moveCurve, 1.2f, delay));
             }
         }
 
@@ -507,14 +539,14 @@ public class QuizManager : MonoBehaviour {
         //    uiGames[i].ownRect.gameObject.SetActive(false);
         //    uiGames[i].ownRect.anchoredPosition += outOfScreenX;
         //}
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitUntil(() => progressToNextQuestion == true);
 
 
-        StartCoroutine(Util.MoveToPos(desc.rect.anchoredPosition, desc.rect.anchoredPosition + outOfScreenX, desc.rect, curves.moveCurve, 2));
+        StartCoroutine(Util.MoveToPos(desc.rect.anchoredPosition, desc.rect.anchoredPosition + outOfScreenX, desc.rect, curves.moveCurve, 1.5f));
 
-        StartCoroutine(Util.MoveToPos(cor.ownRect.anchoredPosition, cor.ownRect.anchoredPosition - outOfScreenY, cor.ownRect, curves.underShoot, 1.2f));
+        StartCoroutine(Util.MoveToPos(cor.ownRect.anchoredPosition, cor.ownRect.anchoredPosition - outOfScreenY, cor.ownRect, curves.hangingUndershoot, 1.5f));
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.75f);
 
 
         for (int i = 0; i < 3; i++)
@@ -531,31 +563,36 @@ public class QuizManager : MonoBehaviour {
         question.text = "";
 
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.8f);
 
         BeginQuiz();
     }
-
+     
 
     public void UpdateMashupGame()
     {
-        string text = "";
+        string text = "Mashup Game is currently a game that ";
 
+        int i = mashupGame.featureList.Count;
         foreach(KeyValuePair<QuizType,List<Feature>> f in mashupGame.featureList)
         {
             if(f.Value != null)
             {
                 if (f.Value.Count > 0)
                 {
+                    if(text != "Mashup Game is currently a game that ")
+                    {
+                        text += ", and ";
+                    }
                     text += FindDescriptorString(f.Key) + " ";
                     foreach(Feature ff in f.Value)
                     {
-                        text += ff.Name + ",";
+                        text += ff.Name;
                     }
-                    text += " and ";
                 }
             }
         }
+        text += ".";
         mashupGameText.text = text;
     }
 
@@ -722,7 +759,7 @@ public class QuizManager : MonoBehaviour {
                 s = "Which of these games has a {0}?";
                 break;
             case QuizType.Theme:
-                s = "Which of these games is {0}?";
+                s = "Which of these games has a {0} theme?";
                 break;
             case QuizType.Developer:
                 s = "Which of these games was made by {0}?";
@@ -757,16 +794,16 @@ public class QuizManager : MonoBehaviour {
         switch (type)
         {
             case QuizType.Platform:
-                s = "Came out for the";
+                s = "came out for the";
                 break;
             case QuizType.Character:
                 s = "stars";
                 break;
             case QuizType.Location:
-                s = "Takes place in";
+                s = "takes place in";
                 break;
             case QuizType.Concept:
-                s = "Includes";
+                s = "includes";
                 break;
             case QuizType.Object:
                 s = "has";
@@ -784,7 +821,7 @@ public class QuizManager : MonoBehaviour {
                 s = "is a";
                 break;
             case QuizType.People:
-                s = "and these people were involved:";
+                s = "with";
                 break;
             case QuizType.DLC:
                 s = "future DLC includes";
